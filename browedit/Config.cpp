@@ -155,7 +155,7 @@ bool Config::showWindow(BrowEdit* browEdit)
 
 		ImGui::Combo("Default Editmode", &defaultEditMode, editModes.c_str());
 
-
+		ImGui::Checkbox("Start in maximized window", &startMaximizedWindow);
 		ImGui::Checkbox("Save a backup of maps when saving", &backup);
 		ImGui::Checkbox("Recalculate quadtree on save", &recalculateQuadtreeOnSave);
 

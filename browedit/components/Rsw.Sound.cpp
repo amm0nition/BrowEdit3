@@ -18,9 +18,9 @@ void RswSound::load(std::istream* is, int version)
 {
 	auto rswObject = node->getComponent<RswObject>();
 
-	node->name = util::iso_8859_1_to_utf8(util::FileIO::readString(is, 80));
+	node->name = util::cp949_to_utf8(util::FileIO::readString(is, 80));
 
-	fileName = util::iso_8859_1_to_utf8(util::FileIO::readString(is, 80));
+	fileName = util::cp949_to_utf8(util::FileIO::readString(is, 80));
 
 	is->read(reinterpret_cast<char*>(glm::value_ptr(rswObject->position)), sizeof(float) * 3);
 	is->read(reinterpret_cast<char*>(&vol), sizeof(float));
@@ -38,8 +38,8 @@ void RswSound::save(std::ofstream& file, int version)
 {
 	auto rswObject = node->getComponent<RswObject>();
 
-	util::FileIO::writeString(file, util::utf8_to_iso_8859_1(node->name), 80);
-	util::FileIO::writeString(file, util::utf8_to_iso_8859_1(fileName), 80);
+	util::FileIO::writeString(file, util::utf8_to_cp949(node->name), 80);
+	util::FileIO::writeString(file, util::utf8_to_cp949(fileName), 80);
 
 	file.write(reinterpret_cast<char*>(glm::value_ptr(rswObject->position)), sizeof(float) * 3);
 	file.write(reinterpret_cast<char*>(&vol), sizeof(float));

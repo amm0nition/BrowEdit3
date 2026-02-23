@@ -136,7 +136,7 @@ void BrowEdit::run()
 			tagList = util::FileIO::getJson("data\\tags.json").get<std::map<std::string, std::vector<std::string>>>();
 			for (auto tag : tagList)
 				for (const auto& t : tag.second)
-					tagListReverse[util::tolower(util::utf8_to_iso_8859_1(t))].push_back(util::utf8_to_iso_8859_1(tag.first));
+					tagListReverse[util::tolower(util::utf8_to_cp949(t))].push_back(util::utf8_to_cp949(tag.first));
 		}
 		catch (...) {}
 	}

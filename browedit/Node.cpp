@@ -197,7 +197,7 @@ void Node::addComponentsFromJson(const nlohmann::json& data)
 			auto rswModel = new RswModel();
 			from_json(c, *rswModel);
 			this->addComponent(rswModel);
-			this->addComponent(util::ResourceManager<Rsm>::load("data\\model\\" + util::utf8_to_iso_8859_1(rswModel->fileName)));
+			this->addComponent(util::ResourceManager<Rsm>::load("data\\model\\" + util::utf8_to_cp949(rswModel->fileName)));
 			this->addComponent(new RsmRenderer());
 			this->addComponent(new RswModelCollider());
 		}

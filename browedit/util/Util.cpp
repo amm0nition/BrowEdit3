@@ -84,41 +84,34 @@ namespace util
 		return value;
 	}
 
-	std::string iso_8859_1_to_utf8(const std::string& str)
+	std::string cp949_to_utf8(const std::string& str)
 	{
-		std::string strOut;
-		for (auto it = str.cbegin(); it != str.cend(); ++it)
-		{
-			uint8_t ch = *it;
-			if (ch < 0x80) {
-				strOut.push_back(ch);
-			}
-			else {
-				strOut.push_back(0xc0 | ch >> 6);
-				strOut.push_back(0x80 | (ch & 0x3f));
-			}
-		}
-		return strOut;
+		if (str.empty()) return "";
+
+		int wlen = MultiByteToWideChar(949, 0, str.data(), (int)str.size(), NULL, 0);
+		std::wstring wstr(wlen, 0);
+		MultiByteToWideChar(949, 0, str.data(), (int)str.size(), wstr.data(), wlen);
+
+		int ulen = WideCharToMultiByte(CP_UTF8, 0, wstr.data(), wlen, NULL, 0, NULL, NULL);
+		std::string utf8str(ulen, 0);
+		WideCharToMultiByte(CP_UTF8, 0, wstr.data(), wlen, utf8str.data(), ulen, NULL, NULL);
+
+		return utf8str;
 	}
 
-	std::string utf8_to_iso_8859_1(const std::string& str)
+	std::string utf8_to_cp949(const std::string& str)
 	{
-		std::string strOut;
-		for (auto it = str.cbegin(); it != str.cend(); ++it)
-		{
-			uint8_t ch = *it;
-			if (ch < 0x80) {
-				strOut.push_back(ch);
-			}
-			else {
-				++it;
-				if (it == str.cend())
-					break;
-				uint8_t ch2 = *it;
-				strOut.push_back((ch & ~0xc0) << 6 | (ch2 & ~0x80));
-			}
-		}
-		return strOut;
+		if (str.empty()) return "";
+
+		int wlen = MultiByteToWideChar(CP_UTF8, 0, str.data(), (int)str.size(), NULL, 0);
+		std::wstring wstr(wlen, 0);
+		MultiByteToWideChar(CP_UTF8, 0, str.data(), (int)str.size(), wstr.data(), wlen);
+
+		int len = WideCharToMultiByte(949, 0, wstr.data(), wlen, NULL, 0, NULL, NULL);
+		std::string euc_str(len, 0);
+		WideCharToMultiByte(949, 0, wstr.data(), wlen, euc_str.data(), len, NULL, NULL);
+
+		return euc_str;
 	}
 
 	std::string& tolowerInPlace(std::string& str)

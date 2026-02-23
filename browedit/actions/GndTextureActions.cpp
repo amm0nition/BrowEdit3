@@ -48,7 +48,7 @@ void GndTextureAddAction::undo(Map* map, BrowEdit* browEdit)
 
 std::string GndTextureAddAction::str()
 {
-	return "Added texture " + util::iso_8859_1_to_utf8(fileName);
+	return "Added texture " + util::cp949_to_utf8(fileName);
 }
 
 GndTextureDelAction::GndTextureDelAction(int index) : index(index)
@@ -119,7 +119,7 @@ void GndTextureDelAction::undo(Map* map, BrowEdit* browEdit)
 
 std::string GndTextureDelAction::str()
 {
-	return "Deleted texture " + util::iso_8859_1_to_utf8(fileName);
+	return "Deleted texture " + util::cp949_to_utf8(fileName);
 }
 
 GndTextureChangeAction::GndTextureChangeAction(int index, const std::string& fileName) : index(index), newTexture(fileName)
@@ -149,7 +149,7 @@ void GndTextureChangeAction::undo(Map* map, BrowEdit* browEdit)
 
 std::string GndTextureChangeAction::str()
 {
-	return "Change texture to " + util::iso_8859_1_to_utf8(newTexture);
+	return "Change texture to " + util::cp949_to_utf8(newTexture);
 }
 
 

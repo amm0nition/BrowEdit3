@@ -9,14 +9,14 @@
 ModelChangeAction::ModelChangeAction(Node* node, const std::string& newFileName) : node(node), newFileName(newFileName)
 {
 	auto rswModel = node->getComponent<RswModel>();
-	oldFileName = "data\\model\\" + util::utf8_to_iso_8859_1(rswModel->fileName);
+	oldFileName = "data\\model\\" + util::utf8_to_cp949(rswModel->fileName);
 
 }
 
 void ModelChangeAction::perform(Map* map, BrowEdit* browEdit)
 {
 	auto rswModel = node->getComponent<RswModel>();
-	rswModel->fileName = util::iso_8859_1_to_utf8(newFileName.substr(11));
+	rswModel->fileName = util::cp949_to_utf8(newFileName.substr(11));
 	auto removed = node->removeComponent<Rsm>();
 	for (auto r : removed)
 		util::ResourceManager<Rsm>::unload(r);
@@ -28,7 +28,7 @@ void ModelChangeAction::perform(Map* map, BrowEdit* browEdit)
 void ModelChangeAction::undo(Map* map, BrowEdit* browEdit)
 {
 	auto rswModel = node->getComponent<RswModel>();
-	rswModel->fileName = util::iso_8859_1_to_utf8(oldFileName);
+	rswModel->fileName = util::cp949_to_utf8(oldFileName);
 	auto removed = node->removeComponent<Rsm>();
 	for (auto r : removed)
 		util::ResourceManager<Rsm>::unload(r);

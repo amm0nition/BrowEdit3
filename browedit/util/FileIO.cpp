@@ -129,7 +129,7 @@ namespace util
 	{
 		if (fileName.find("\\") == std::string::npos)
 		{
-			files.insert(iso_8859_1_to_utf8(fileName));
+			files.insert(cp949_to_utf8(fileName));
 			return this;
 		}
 		else
@@ -139,7 +139,7 @@ namespace util
 			auto dirNode = directories.find(dir);
 			if (dirNode == directories.end())
 			{
-				directories[dir] = new Node(iso_8859_1_to_utf8(dir), this);
+				directories[dir] = new Node(cp949_to_utf8(dir), this);
 				dirNode = directories.find(dir);
 			}
 			return dirNode->second->addFile(rest);

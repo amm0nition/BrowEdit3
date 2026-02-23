@@ -24,20 +24,20 @@ std::string Config::isValid() const
 	if (ropath == "")
 		return "Ro path is empty";
 
-	if (!std::filesystem::exists(util::utf8_to_iso_8859_1(ropath)))
+	if (!std::filesystem::exists(util::utf8_to_cp949(ropath)))
 		return "Ro path does not exist";
 
 	if (ropath[ropath.size() - 1] != '\\')
 		return "Ro path should end with a \\";
 
-	if (!std::filesystem::exists(util::utf8_to_iso_8859_1(ropath) + "data"))
+	if (!std::filesystem::exists(util::utf8_to_cp949(ropath) + "data"))
 		return "Please create a data directory in your RO directory";
 
-	if (grfEditorPath != "" && !std::filesystem::exists(util::utf8_to_iso_8859_1(grfEditorPath) + "GrfCL.exe"))
+	if (grfEditorPath != "" && !std::filesystem::exists(util::utf8_to_cp949(grfEditorPath) + "GrfCL.exe"))
 		return "GrfCL.exe not found in grf editor path";
 	for (const auto& grf : grfs)
 	{
-		if (!std::filesystem::exists(util::utf8_to_iso_8859_1(grf)))
+		if (!std::filesystem::exists(util::utf8_to_cp949(grf)))
 			return "Grf " + grf + " does not exist";
 		if (grf.substr(std::max(0, (int)grf.size() - 4), 4) != ".grf")
 			return "Grf " + grf + " does not end with .grf";
@@ -64,8 +64,8 @@ bool Config::showWindow(BrowEdit* browEdit)
 		ImGui::SameLine();
 		if (ImGui::Button("Browse##rodir"))
 		{
-			auto path = util::SelectPathDialog(util::utf8_to_iso_8859_1(ropath));
-			if (!path.empty()) ropath = util::iso_8859_1_to_utf8(path);
+			auto path = util::SelectPathDialog(util::utf8_to_cp949(ropath));
+			if (!path.empty()) ropath = util::cp949_to_utf8(path);
 		}
 		ImGui::Text("GRF Files");
 		if(ImGui::BeginListBox("##GRFs"))
@@ -77,7 +77,7 @@ bool Config::showWindow(BrowEdit* browEdit)
 				ImGui::SameLine();
 				if (ImGui::Button("Browse##grf"))
 				{
-					std::string initial = util::utf8_to_iso_8859_1(grfs[i]);
+					std::string initial = util::utf8_to_cp949(grfs[i]);
 					if (initial.find(":") == std::string::npos)
 						initial = std::filesystem::current_path().string() + "\\" + initial;
 
@@ -85,7 +85,7 @@ bool Config::showWindow(BrowEdit* browEdit)
 						initial = "";
 
 					auto path = util::SelectFileDialog(initial, "All\0*.*\0GRF files\0*.grf\0");
-					if (!path.empty()) grfs[i] = util::iso_8859_1_to_utf8(path);
+					if (!path.empty()) grfs[i] = util::cp949_to_utf8(path);
 				}
 				ImGui::SameLine();
 				if (ImGui::Button("Remove"))
@@ -203,19 +203,19 @@ bool Config::showWindow(BrowEdit* browEdit)
 		ImGui::SameLine();
 		if (ImGui::Button("Browse##grfeditor"))
 		{
-			std::string initial = util::utf8_to_iso_8859_1(grfEditorPath);
+			std::string initial = util::utf8_to_cp949(grfEditorPath);
 			if (initial == "")
 				initial = "c:\\Program Files (x86)\\GRF Editor\\";
 
 			auto path = util::SelectPathDialog(initial, "Select your GRF editor path (not data)");
-			if (!path.empty()) grfEditorPath = util::iso_8859_1_to_utf8(path);
+			if (!path.empty()) grfEditorPath = util::cp949_to_utf8(path);
 		}
 
 		ImGui::InputText("ffmpeg path", &ffmpegPath);
 		ImGui::SameLine();
 		if (ImGui::Button("Browse##ffmpegPath"))
 		{
-			std::string initial = util::utf8_to_iso_8859_1(ffmpegPath);
+			std::string initial = util::utf8_to_cp949(ffmpegPath);
 			if (initial.find(":") == std::string::npos)
 				initial = std::filesystem::current_path().string() + "\\" + initial;
 
@@ -223,7 +223,7 @@ bool Config::showWindow(BrowEdit* browEdit)
 				initial = "";
 
 			auto path = util::SelectFileDialog(initial, "ffmpeg\0ffmpeg.exe\0All Files\0*.*\0");
-			if (!path.empty()) ffmpegPath = util::iso_8859_1_to_utf8(path);
+			if (!path.empty()) ffmpegPath = util::cp949_to_utf8(path);
 		}
 
 		if (ImGui::Button("Save"))
@@ -268,9 +268,9 @@ void Config::setupFileIO()
 {
 	util::FileIO::begin();
 	util::FileIO::addDirectory(".\\");
-	util::FileIO::addDirectory(util::utf8_to_iso_8859_1(ropath));
+	util::FileIO::addDirectory(util::utf8_to_cp949(ropath));
 	for (const auto& grf : grfs)
-		util::FileIO::addGrf(util::utf8_to_iso_8859_1(grf));
+		util::FileIO::addGrf(util::utf8_to_cp949(grf));
 	util::FileIO::end();
 }
 

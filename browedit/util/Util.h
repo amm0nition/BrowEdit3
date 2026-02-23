@@ -44,8 +44,8 @@ namespace util
 	double toUnitSize(std::size_t x);
 
 	short swapShort(const short s);
-	std::string iso_8859_1_to_utf8(const std::string& str);
-	std::string utf8_to_iso_8859_1(const std::string& str);
+	std::string cp949_to_utf8(const std::string& str);
+	std::string utf8_to_cp949(const std::string& str);
 
 	float wrap360(float value);
 

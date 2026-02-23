@@ -105,7 +105,7 @@ void ModelEditor::run(BrowEdit* browEdit)
 							selectFirst = false;
 							openFileSelected = i;
 						}
-						if (ImGui::Selectable(util::iso_8859_1_to_utf8(modelFiles[i]).c_str(), openFileSelected == i))
+						if (ImGui::Selectable(util::cp949_to_utf8(modelFiles[i]).c_str(), openFileSelected == i))
 							openFileSelected = i;
 						if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0))
 						{
@@ -144,7 +144,7 @@ void ModelEditor::run(BrowEdit* browEdit)
 	{
 		auto rsm = m.node->getComponent<Rsm>();
 		auto rsmRenderer = m.node->getComponent<RsmRenderer>();
-		if (ImGui::Begin(util::iso_8859_1_to_utf8(rsm->fileName).c_str()))
+		if (ImGui::Begin(util::cp949_to_utf8(rsm->fileName).c_str()))
 		{
 			if (ImGui::IsWindowFocused()) {
 				activeModelViewPtr = &m;
@@ -478,7 +478,7 @@ void ModelEditor::run(BrowEdit* browEdit)
 		};
 
 
-		bool opened = ImGui::TreeNodeEx(util::iso_8859_1_to_utf8(rsm->fileName).c_str(), (ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnDoubleClick) | (activeModelView.selectedMesh == nullptr ? ImGuiTreeNodeFlags_Selected : 0));
+		bool opened = ImGui::TreeNodeEx(util::cp949_to_utf8(rsm->fileName).c_str(), (ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnDoubleClick) | (activeModelView.selectedMesh == nullptr ? ImGuiTreeNodeFlags_Selected : 0));
 		if (ImGui::IsItemClicked())
 			activeModelView.selectedMesh = nullptr;
 		if(opened)
@@ -563,9 +563,9 @@ void ModelEditor::run(BrowEdit* browEdit)
 				for (auto& t : rsm->textures)
 				{
 					ImGui::PushID(i);
-					std::string texture = util::iso_8859_1_to_utf8(t);
+					std::string texture = util::cp949_to_utf8(t);
 					if (ImGui::InputText("Texture", &texture)) {
-						t = util::utf8_to_iso_8859_1(texture);
+						t = util::utf8_to_cp949(texture);
 					}
 					
 					if (ImGui::Button("Load")) 	{
@@ -655,11 +655,11 @@ void ModelEditor::run(BrowEdit* browEdit)
 				for (auto& t : activeModelView.selectedMesh->textures)
 				{
 					ImGui::PushID(t);
-					if (ImGui::BeginCombo(("Texture " + std::to_string(i)).c_str(), util::iso_8859_1_to_utf8(rsm->textures[t]).c_str()))
+					if (ImGui::BeginCombo(("Texture " + std::to_string(i)).c_str(), util::cp949_to_utf8(rsm->textures[t]).c_str()))
 					{
 						for (auto ii = 0; ii < rsm->textures.size(); ii++)
 						{
-							if (ImGui::Selectable(util::iso_8859_1_to_utf8(rsm->textures[ii]).c_str(), t == ii))
+							if (ImGui::Selectable(util::cp949_to_utf8(rsm->textures[ii]).c_str(), t == ii))
 							{
 								activeModelView.selectedMesh->textures[i] = ii;
 								rsmRenderer->setMeshesDirty();

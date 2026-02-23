@@ -27,18 +27,18 @@ void BrowEdit::showWallWindow()
 		return;
 	}
 
-	if (gnd->textures.size() > 0 && ImGui::BeginCombo("Texture", util::iso_8859_1_to_utf8(gnd->textures[activeMapView->textureSelected]->file).c_str(), ImGuiComboFlags_HeightLargest))
+	if (gnd->textures.size() > 0 && ImGui::BeginCombo("Texture", util::cp949_to_utf8(gnd->textures[activeMapView->textureSelected]->file).c_str(), ImGuiComboFlags_HeightLargest))
 	{
 		for (auto i = 0; i < gnd->textures.size(); i++)
 		{
-			if (ImGui::Selectable(util::iso_8859_1_to_utf8("##" + gnd->textures[i]->file).c_str(), i == activeMapView->textureSelected, 0, ImVec2(0, 64)))
+			if (ImGui::Selectable(util::cp949_to_utf8("##" + gnd->textures[i]->file).c_str(), i == activeMapView->textureSelected, 0, ImVec2(0, 64)))
 			{
 				activeMapView->textureSelected = i;
 			}
 			ImGui::SameLine(0);
 			ImGui::Image((ImTextureID)(long long)gndRenderer->textures[i]->id(), ImVec2(64, 64));
 			ImGui::SameLine(80);
-			ImGui::Text(util::iso_8859_1_to_utf8(gnd->textures[i]->file).c_str());
+			ImGui::Text(util::cp949_to_utf8(gnd->textures[i]->file).c_str());
 
 		}
 		ImGui::EndCombo();

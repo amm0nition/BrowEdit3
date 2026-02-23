@@ -47,6 +47,9 @@ bool BrowEdit::imguiBegin()
     //io.Fonts->AddFontDefault();
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
     io.Fonts->AddFontFromFileTTF("data/segoeui.ttf", 20.0f);
+    ImFontConfig fontConfig;
+    fontConfig.MergeMode = true;
+    io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\malgun.ttf", 20.0f, &fontConfig, io.Fonts->GetGlyphRangesKorean());
     //font = io.Fonts->AddFontFromFileTTF("data/BATANG.ttf", 20.0f, nullptr, io.Fonts->GetGlyphRangesKorean());
     io.Fonts->Build();
 

@@ -21,7 +21,7 @@ void RswModel::load(std::istream* is, int version, int buildNumber, bool loadMod
 	auto rswObject = node->getComponent<RswObject>();
 	if (version >= 0x103)
 	{
-		node->name = util::iso_8859_1_to_utf8(util::FileIO::readString(is, 40));
+		node->name = util::cp949_to_utf8(util::FileIO::readString(is, 40));
 
 		is->read(reinterpret_cast<char*>(&animType), sizeof(int));
 		is->read(reinterpret_cast<char*>(&animSpeed), sizeof(float));
@@ -41,9 +41,9 @@ void RswModel::load(std::istream* is, int version, int buildNumber, bool loadMod
 
 	std::string fileNameRaw = util::FileIO::readString(is, 80);
 	//std::cout << "Model: " << node->name << "\t" << fileNameRaw << std::endl;
-	fileName = util::iso_8859_1_to_utf8(fileNameRaw);
-	assert(fileNameRaw == util::utf8_to_iso_8859_1(fileName));
-	objectName = util::iso_8859_1_to_utf8(util::FileIO::readString(is, 80)); // TODO: Unknown?
+	fileName = util::cp949_to_utf8(fileNameRaw);
+	assert(fileNameRaw == util::utf8_to_cp949(fileName));
+	objectName = util::cp949_to_utf8(util::FileIO::readString(is, 80)); // TODO: Unknown?
 	is->read(reinterpret_cast<char*>(glm::value_ptr(rswObject->position)), sizeof(float) * 3);
 	is->read(reinterpret_cast<char*>(glm::value_ptr(rswObject->rotation)), sizeof(float) * 3);
 	is->read(reinterpret_cast<char*>(glm::value_ptr(rswObject->scale)), sizeof(float) * 3);
@@ -76,7 +76,7 @@ void RswModel::save(std::ofstream& file, int version, int buildNumber)
 	auto rswObject = node->getComponent<RswObject>();
 	if (version >= 0x103)
 	{
-		util::FileIO::writeString(file, util::utf8_to_iso_8859_1(node->name), 40);
+		util::FileIO::writeString(file, util::utf8_to_cp949(node->name), 40);
 		file.write(reinterpret_cast<char*>(&animType), sizeof(int));
 		file.write(reinterpret_cast<char*>(&animSpeed), sizeof(float));
 		file.write(reinterpret_cast<char*>(&blockType), sizeof(int));
@@ -92,8 +92,8 @@ void RswModel::save(std::ofstream& file, int version, int buildNumber)
 			file.write(reinterpret_cast<char*>(&unknown), sizeof(int));
 		}
 	}
-	util::FileIO::writeString(file, util::utf8_to_iso_8859_1(fileName), 80);
-	util::FileIO::writeString(file, util::utf8_to_iso_8859_1(objectName), 80); //unknown
+	util::FileIO::writeString(file, util::utf8_to_cp949(fileName), 80);
+	util::FileIO::writeString(file, util::utf8_to_cp949(objectName), 80); //unknown
 	file.write(reinterpret_cast<char*>(glm::value_ptr(rswObject->position)), sizeof(float) * 3);
 	file.write(reinterpret_cast<char*>(glm::value_ptr(rswObject->rotation)), sizeof(float) * 3);
 	file.write(reinterpret_cast<char*>(glm::value_ptr(rswObject->scale)), sizeof(float) * 3);
@@ -147,7 +147,7 @@ void RswModel::buildImGuiMulti(BrowEdit* browEdit, const std::vector<Node*>& nod
 						auto removed = rswModel->node->removeComponent<Rsm>();
 						for (auto r : removed)
 							util::ResourceManager<Rsm>::unload(r);
-						rswModel->node->addComponent(util::ResourceManager<Rsm>::load("data\\model\\" + util::utf8_to_iso_8859_1(rswModel->fileName)));
+						rswModel->node->addComponent(util::ResourceManager<Rsm>::load("data\\model\\" + util::utf8_to_cp949(rswModel->fileName)));
 						rswModel->node->getComponent<RsmRenderer>()->begin();
 						rswModel->node->getComponent<RswModelCollider>()->begin();
 					}
@@ -163,12 +163,12 @@ void RswModel::buildImGuiMulti(BrowEdit* browEdit, const std::vector<Node*>& nod
 	util::DragIntMulti<RswModel>(browEdit, browEdit->activeMapView->map, rswModels, "Block Type", [](RswModel* m) { return &m->blockType; }, 1, 0, 100);
 	if (util::InputTextMulti<RswModel>(browEdit, browEdit->activeMapView->map, rswModels, "Filename", [](RswModel* m) { return &m->fileName; }))
 		for (auto m : rswModels)
-			if (util::utf8_to_iso_8859_1(m->fileName).size() > 80)
-				m->fileName = util::iso_8859_1_to_utf8(util::utf8_to_iso_8859_1(m->fileName).substr(0, 80));
+			if (util::utf8_to_cp949(m->fileName).size() > 80)
+				m->fileName = util::cp949_to_utf8(util::utf8_to_cp949(m->fileName).substr(0, 80));
 	if(util::InputTextMulti<RswModel>(browEdit, browEdit->activeMapView->map, rswModels, "ObjectName", [](RswModel* m) { return &m->objectName; }))
 		for (auto m : rswModels)
-			if (util::utf8_to_iso_8859_1(m->objectName).size() > 80)
-				m->objectName = util::iso_8859_1_to_utf8(util::utf8_to_iso_8859_1(m->objectName).substr(0, 80));
+			if (util::utf8_to_cp949(m->objectName).size() > 80)
+				m->objectName = util::cp949_to_utf8(util::utf8_to_cp949(m->objectName).substr(0, 80));
 
 	util::DragFloatMulti<RswModel>(browEdit, browEdit->activeMapView->map, rswModels, "Shadow Strength", [](RswModel* m) { return &m->shadowStrength; }, 0.01f, 0.0f, 1.0f);
 	if (ImGui::CollapsingHeader("AutoGat properties", ImGuiTreeNodeFlags_DefaultOpen))

@@ -24,7 +24,7 @@ void BrowEdit::showExportWindow()
 		ImGui::SameLine();
 		if (ImGui::Button("Browse"))
 		{
-			windowData.exportFolder = util::iso_8859_1_to_utf8(util::SelectPathDialog(util::utf8_to_iso_8859_1(windowData.exportFolder)));
+			windowData.exportFolder = util::cp949_to_utf8(util::SelectPathDialog(util::utf8_to_cp949(windowData.exportFolder)));
 		}
 		if (ImGui::Button("Export!"))
 		{
@@ -33,7 +33,7 @@ void BrowEdit::showExportWindow()
 			{
 				if (!e.enabled)
 					continue;
-				std::string outFileName = util::utf8_to_iso_8859_1(windowData.exportFolder) + e.filename;
+				std::string outFileName = util::utf8_to_cp949(windowData.exportFolder) + e.filename;
 				std::filesystem::path path(outFileName);
 				auto p = path.parent_path().string();
 				std::filesystem::create_directories(p);
@@ -69,7 +69,7 @@ void BrowEdit::showExportWindow()
 			{
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
-				if (ImGui::Checkbox(util::iso_8859_1_to_utf8(e.filename).c_str(), &e.enabled))
+				if (ImGui::Checkbox(util::cp949_to_utf8(e.filename).c_str(), &e.enabled))
 				{
 					for (auto c : e.linkedForward)
 					{
@@ -87,7 +87,7 @@ void BrowEdit::showExportWindow()
 				ImGui::TableNextColumn();
 				for(auto i : e.linkedBackward)
 					if(i->enabled)
-						ImGui::Text(util::iso_8859_1_to_utf8(i->filename).c_str());
+						ImGui::Text(util::cp949_to_utf8(i->filename).c_str());
 			}
 
 			ImGui::EndTable();

@@ -73,14 +73,14 @@ void BrowEdit::showTextureManageWindow()
 	auto buildBox = [&](const std::string& file, bool fullPath) {
 		if (ImGui::BeginChild(file.c_str(), ImVec2(config.thumbnailSize.x, config.thumbnailSize.y + 50), true, ImGuiWindowFlags_NoScrollbar))
 		{
-			std::string path = util::utf8_to_iso_8859_1(file);
+			std::string path = util::utf8_to_cp949(file);
 			if (!fullPath)
 			{
 				auto n = windowData.textureManageWindowSelectedTreeNode;
 				while (n)
 				{
 					if (n->name != "")
-						path = util::utf8_to_iso_8859_1(n->name) + "\\" + path;
+						path = util::utf8_to_cp949(n->name) + "\\" + path;
 					n = n->parent;
 				}
 			}
@@ -159,7 +159,7 @@ void BrowEdit::showTextureManageWindow()
 					ImGui::SameLine();
 					if (ImGui::Button("Add"))
 					{
-						tagList[newTag].push_back(util::iso_8859_1_to_utf8(path)); //remove data\model\ prefix
+						tagList[newTag].push_back(util::cp949_to_utf8(path)); //remove data\model\ prefix
 						tagListReverse[path].push_back(newTag);
 						saveTagList();
 					}
@@ -171,7 +171,7 @@ void BrowEdit::showTextureManageWindow()
 						ImGui::SameLine();
 						if (ImGui::Button("Remove"))
 						{
-							tagList[tag].erase(std::remove_if(tagList[tag].begin(), tagList[tag].end(), [&](const std::string& m) { return m == util::iso_8859_1_to_utf8(path); }), tagList[tag].end());
+							tagList[tag].erase(std::remove_if(tagList[tag].begin(), tagList[tag].end(), [&](const std::string& m) { return m == util::cp949_to_utf8(path); }), tagList[tag].end());
 							tagListReverse[path].erase(std::remove_if(tagListReverse[path].begin(), tagListReverse[path].end(), [&](const std::string& t) { return t == tag; }), tagListReverse[path].end());
 							saveTagList();
 						}
@@ -243,7 +243,7 @@ void BrowEdit::showTextureManageWindow()
 							t.first.find(".png") == std::string::npos &&
 							t.first.find(".gif") == std::string::npos)
 							continue;
-						filteredFiles.push_back(util::iso_8859_1_to_utf8(t.first));
+						filteredFiles.push_back(util::cp949_to_utf8(t.first));
 					}
 				}
 			}

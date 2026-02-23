@@ -65,12 +65,12 @@ public:
 		Texture(const std::string& name, const std::string& file) : name(name), file(file) {}
 		~Texture();
 		friend void to_json(nlohmann::json& nlohmann_json_j, const Texture& nlohmann_json_t) {
-			nlohmann_json_j["file"] = util::iso_8859_1_to_utf8(nlohmann_json_t.file);
-			nlohmann_json_j["name"] = util::iso_8859_1_to_utf8(nlohmann_json_t.name);
+			nlohmann_json_j["file"] = util::cp949_to_utf8(nlohmann_json_t.file);
+			nlohmann_json_j["name"] = util::cp949_to_utf8(nlohmann_json_t.name);
 		}
 		friend void from_json(const nlohmann::json& nlohmann_json_j, Texture& nlohmann_json_t) { 
-			nlohmann_json_t.file = util::utf8_to_iso_8859_1(nlohmann_json_j["file"].get<std::string>());
-			nlohmann_json_t.name = util::utf8_to_iso_8859_1(nlohmann_json_j["name"].get<std::string>());
+			nlohmann_json_t.file = util::utf8_to_cp949(nlohmann_json_j["file"].get<std::string>());
+			nlohmann_json_t.name = util::utf8_to_cp949(nlohmann_json_j["name"].get<std::string>());
 		}
 		bool operator == (const Texture& other) const { return this->name == other.name && this->file == other.file; }
 	};

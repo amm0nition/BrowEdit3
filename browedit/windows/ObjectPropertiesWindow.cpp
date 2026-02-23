@@ -13,8 +13,8 @@ void BrowEdit::showObjectProperties()
 	{
 		if (util::InputText(this, activeMapView->map, activeMapView->map->selectedNodes[0], "Name", &activeMapView->map->selectedNodes[0]->name, 0, "Renaming"))
 		{
-			if (util::utf8_to_iso_8859_1(activeMapView->map->selectedNodes[0]->name).size() > 40)
-				activeMapView->map->selectedNodes[0]->name= util::iso_8859_1_to_utf8(util::utf8_to_iso_8859_1(activeMapView->map->selectedNodes[0]->name).substr(0, 40));
+			if (util::utf8_to_cp949(activeMapView->map->selectedNodes[0]->name).size() > 40)
+				activeMapView->map->selectedNodes[0]->name= util::cp949_to_utf8(util::utf8_to_cp949(activeMapView->map->selectedNodes[0]->name).substr(0, 40));
 			activeMapView->map->selectedNodes[0]->onRename(activeMapView->map);
 		}
 		if (activeMapView->map->selectedNodes.size() == 1)

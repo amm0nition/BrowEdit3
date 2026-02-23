@@ -114,7 +114,7 @@ void BrowEdit::showObjectWindow()
 				tagList[t.first] = t.second;
 			for (auto tag : tagList)
 				for (const auto& t : tag.second)
-					tagListReverse[util::tolower(util::utf8_to_iso_8859_1(t))].push_back(util::utf8_to_iso_8859_1(tag.first));
+					tagListReverse[util::tolower(util::utf8_to_cp949(t))].push_back(util::utf8_to_cp949(tag.first));
 			saveTagList();
 			std::cout << "TagList merged and saved to file" << std::endl;
 		};
@@ -143,13 +143,13 @@ void BrowEdit::showObjectWindow()
 				if (mapTag.substr(mapTag.size() - 4, 4) == ".rsw")
 					mapTag = mapTag.substr(0, mapTag.size() - 4);
 
-				mapTag = "map:" + util::iso_8859_1_to_utf8(mapTag);
+				mapTag = "map:" + util::cp949_to_utf8(mapTag);
 
 				auto gnd = node->getComponent<Gnd>();
 				for (auto t : gnd->textures)
 				{
 					if (std::find(newTagList[mapTag].begin(), newTagList[mapTag].end(), "data\\texture\\" + t->file) == newTagList[mapTag].end())
-						newTagList[mapTag].push_back("data\\texture\\" + util::iso_8859_1_to_utf8(t->file));
+						newTagList[mapTag].push_back("data\\texture\\" + util::cp949_to_utf8(t->file));
 				}
 
 				node->traverse([&](Node* node)
@@ -239,14 +239,14 @@ void BrowEdit::showObjectWindow()
 
 
 	auto buildBox = [&](const std::string& file, bool fullPath) {
-		std::string path = util::utf8_to_iso_8859_1(file);
+		std::string path = util::utf8_to_cp949(file);
 		if (!fullPath)
 		{
 			auto n = windowData.objectWindowSelectedTreeNode;
 			while (n)
 			{
 				if (n->name != "")
-					path = util::utf8_to_iso_8859_1(n->name) + "\\" + path;
+					path = util::utf8_to_cp949(n->name) + "\\" + path;
 				n = n->parent;
 			}
 		}
@@ -323,11 +323,11 @@ void BrowEdit::showObjectWindow()
 						{
 							std::string name = path.substr(0, path.rfind(".")); //remove .rsm
 							name = name.substr(11); // remove data\model\ 
-							Node* newNode = new Node(util::iso_8859_1_to_utf8(name));
+							Node* newNode = new Node(util::cp949_to_utf8(name));
 							newNode->addComponent(util::ResourceManager<Rsm>::load(path));
 							newNode->addComponent(new RsmRenderer());
 							newNode->addComponent(new RswObject());
-							newNode->addComponent(new RswModel(util::iso_8859_1_to_utf8(path.substr(11)))); //remove data\model\ 
+							newNode->addComponent(new RswModel(util::cp949_to_utf8(path.substr(11)))); //remove data\model\ 
 							newNode->addComponent(new RswModelCollider());
 							newNodes.push_back(std::pair<Node*, glm::vec3>(newNode, glm::vec3(0, 0, 0)));
 							newNodesCenter = glm::vec3(0, 0, 0);
@@ -418,7 +418,7 @@ void BrowEdit::showObjectWindow()
 											auto rswModel = new RswModel();
 											from_json(c, *rswModel);
 											newNode->addComponent(rswModel);
-											newNode->addComponent(util::ResourceManager<Rsm>::load("data\\model\\" + util::utf8_to_iso_8859_1(rswModel->fileName)));
+											newNode->addComponent(util::ResourceManager<Rsm>::load("data\\model\\" + util::utf8_to_cp949(rswModel->fileName)));
 											newNode->addComponent(new RsmRenderer());
 											newNode->addComponent(new RswModelCollider());
 										}
@@ -468,7 +468,7 @@ void BrowEdit::showObjectWindow()
 						}
 						else if (file.substr(file.size() - 4) == ".wav")
 						{
-							auto s = new RswSound(util::iso_8859_1_to_utf8(path.substr(9))); //remove data\wav\ 
+							auto s = new RswSound(util::cp949_to_utf8(path.substr(9))); //remove data\wav\ 
 							Node* newNode = new Node(file);
 							newNode->addComponent(new RswObject());
 							newNode->addComponent(s);
@@ -519,7 +519,7 @@ void BrowEdit::showObjectWindow()
 							activeMapView->map->rootNode->traverse([&](Node* n)
 								{
 									auto rswModel = n->getComponent<RswModel>();
-									if (rswModel && rswModel->fileName == util::iso_8859_1_to_utf8(path))
+									if (rswModel && rswModel->fileName == util::cp949_to_utf8(path))
 									{
 										auto sa = new SelectAction(activeMapView->map, n, !first, false);
 										ga->addAction(sa);
@@ -537,7 +537,7 @@ void BrowEdit::showObjectWindow()
 						ImGui::SameLine();
 						if (ImGui::Button("Add"))
 						{
-							tagList[newTag].push_back(util::iso_8859_1_to_utf8(path)); //remove data\model\ prefix
+							tagList[newTag].push_back(util::cp949_to_utf8(path)); //remove data\model\ prefix
 							tagListReverse[path].push_back(newTag);
 							saveTagList();
 						}
@@ -549,7 +549,7 @@ void BrowEdit::showObjectWindow()
 							ImGui::SameLine();
 							if (ImGui::Button("Remove"))
 							{
-								tagList[tag].erase(std::remove_if(tagList[tag].begin(), tagList[tag].end(), [&](const std::string& m) { return m == util::iso_8859_1_to_utf8(path); }), tagList[tag].end());
+								tagList[tag].erase(std::remove_if(tagList[tag].begin(), tagList[tag].end(), [&](const std::string& m) { return m == util::cp949_to_utf8(path); }), tagList[tag].end());
 								tagListReverse[path].erase(std::remove_if(tagListReverse[path].begin(), tagListReverse[path].end(), [&](const std::string& t) { return t == tag; }), tagListReverse[path].end());
 								saveTagList();
 							}
@@ -614,7 +614,7 @@ void BrowEdit::showObjectWindow()
 		{
 			static std::string currentFilterText = "";
 			static std::vector<std::string> filteredFiles;
-			std::string filter8859 = util::utf8_to_iso_8859_1(filter);
+			std::string filter8859 = util::utf8_to_cp949(filter);
 			util::tolowerInPlace(filter8859);
 			if (currentFilterText != filter8859)
 			{
@@ -648,7 +648,7 @@ void BrowEdit::showObjectWindow()
 							t.first.find(".tga") == std::string::npos &&
 							t.first.find(".png") == std::string::npos &&
 							t.first.find(".gif") == std::string::npos)
-							filteredFiles.push_back(util::iso_8859_1_to_utf8(t.first));
+							filteredFiles.push_back(util::cp949_to_utf8(t.first));
 					}
 				}
 			}

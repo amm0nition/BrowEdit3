@@ -84,6 +84,15 @@ bool BrowEdit::glfwBegin()
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // Enable vsync
 
+    #ifdef _WIN32
+        HWND hwnd = glfwGetWin32Window(window);
+        HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(101)); 
+        if (hIcon)
+        {
+            SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
+            SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+        }
+    #endif
 
     if (
         !gladLoadGL((GLADloadfunc)glfwGetProcAddress)
